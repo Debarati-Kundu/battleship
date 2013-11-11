@@ -135,3 +135,8 @@ td.noBottom {
   margin: 0pt;
   background-color: #D5D5D5;
 }
+
+.centeredImage {
+    text-align:center;
+    display:block;
+}
