@@ -20,6 +20,7 @@ import java.util.Random;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.devrel.samples.ttt.Board;
+import com.google.devrel.samples.ttt.ComputerBoard;
 
 /**
  * Defines v1 of a Board resource as part of the tictactoe API, which provides
@@ -55,6 +56,10 @@ public class BoardV1 {
     }
     Board updated = new Board();
     updated.setState(builder.toString());
+    
+    ComputerBoard CG = new ComputerBoard();
+    CG.placeShips();
+    
     return updated;
   }
   

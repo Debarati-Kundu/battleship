@@ -25,9 +25,11 @@
         <p>You must sign in to play!</p>
       </div>
       <div id="board" class="hidden">
+       
         <table>
+        
           <tr>
-            <td class="noTop noLeft">-</td>
+         <td class="noTop noLeft">-</td> 
             <td class="noTop">-</td>
             <td class="noTop noRight">-</td>
           </tr>
@@ -41,7 +43,22 @@
             <td class="noBottom">-</td>
             <td class="noBottom noRight">-</td>
           </tr>
-        </table>
+          
+        </table> 
+        
+        <script type="text/javascript">
+        	var mytable = "<table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>";
+	        for (var i = 0; i < 10; i++) {
+	        	mytable += "</tr><tr>";
+	        	for (var j = 0; j < 10; j++) {
+	        		mytable += "<td></td>";
+	          }         
+	        }
+        	mytable += "</tr></tbody></table>";
+        	document.write(mytable);
+        </script>
+        
+        
         <div id="restartButton"><a href="#">Restart</a></div>
         <div id="victory"></div>
       </div>
