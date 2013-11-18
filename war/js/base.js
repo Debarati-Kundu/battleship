@@ -123,12 +123,39 @@ google.devrel.samples.ttt.resetGame = function() {
  */
 google.devrel.samples.ttt.getComputerMove = function(boardString) {
 	gapi.client.tictactoe.board.gethit({'state': boardString}).execute(function(resp) {
-		console.log(resp.sunk);
-		console.log(resp.allSunk);
+//		console.log(resp.sunk);
+//		console.log(resp.allSunk);
 		google.devrel.samples.ttt.setBoardFilling(resp.state);
+	//	var prevCount = resp.sinkCount;
+		console.log(resp.sinkDiff);
+		if (resp.sinkDiff){
 		
-		if(resp.allSunk == false) {  // To be changed later to handle game ending cases.
+			var sinkarr = resp.sunk;
+			var sinking = document.getElementById('sinking');
+			sinking.innerHTML = '';
+			if(sinkarr[0]) {
+				sinking.innerHTML += "You sunk Aircraft Carrier!<br>";
+			} 
+			if(sinkarr[1]) {
+				sinking.innerHTML += "You sunk Battleship!<br>";
+			} 
+			if(sinkarr[2]) {
+				sinking.innerHTML += "You sunk Destroyer!<br>";
+			} 
+			if(sinkarr[3]) {
+				sinking.innerHTML += "You sunk Submarine!<br>";
+			} 	
+			if(sinkarr[4]) {
+				sinking.innerHTML += "You sunk Patrol Boat!<br>";
+			}		
+			
+		}
+	
+		if(resp.allSunk == false) {  // To be changed later to handle game ending cases.			
 			google.devrel.samples.ttt.waitingForMove = true;
+		}
+		else {
+			// Print how many moves needed
 		}
 	});
 };

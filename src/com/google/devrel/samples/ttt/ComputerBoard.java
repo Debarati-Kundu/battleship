@@ -60,6 +60,8 @@ public class ComputerBoard implements Serializable{
     public boolean[] sunk = new boolean[NUM_SHIPS];
     
     public boolean allSunk = false;
+    public Integer sinkCount = 0;
+    public boolean sinkDiff;
     
 //    @Serialize
 //	public Cell[][] ComputerGrid = new Cell[NUM_ROWS][NUM_COLS];

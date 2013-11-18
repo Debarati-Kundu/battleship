@@ -51,6 +51,14 @@ body {
 #gameHistoryWrapper {
   background-color: whiteSmoke;
 }
+
+#sinking {
+  height: 1em;
+  padding: 5pt;
+  color: green;
+  font-weight: bold;
+}
+
 #victory {
   height: 1em;
   padding: 5pt;

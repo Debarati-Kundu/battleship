@@ -97,7 +97,7 @@ public class BoardV1 {
 					  else incomingStateChars[i*NUM_COLS + j] = DASH;
 				  }
 			  }
-			  int sunkcount = 0;
+			  Integer sunkcount = 0;
 			  for (int i = 0; i < NUM_SHIPS; i++) {
 				  int hitcount = 0;
 				  for (int j = 0; j < str.SHIP_LENGTHS[i]; j++) {
@@ -115,12 +115,24 @@ public class BoardV1 {
 					  }
 				  }
 			  }
+			  if (!sunkcount.equals(str.sinkCount)) str.sinkDiff = true;
+			  	else str.sinkDiff = false;
+			  
+//			  if ((sunkcount - str.sinkCount) != 0) {str.sinkDiff = true;}
+//			  System.out.println(sunkcount + " " + str.sinkCount + " " + str.sinkDiff);
+			  str.sinkCount = sunkcount;
 			  if (sunkcount == NUM_SHIPS) {
+				  
+			//	  System.out.println(str.sinkCount);
 				  str.allSunk = true;
+				  str.sinkCount = sunkcount;
 				  inputboard.allSunk = true;
+				  inputboard.sinkCount = sunkcount;
 			  }
+			  inputboard.sinkDiff = str.sinkDiff;  
+			  ofy().save().entity(str).now();
 		  } 
-		  
+	  
 	  inputboard.setState(String.valueOf(incomingStateChars));
 //      System.out.println(String.valueOf(incomingStateChars));
 	  return inputboard;
