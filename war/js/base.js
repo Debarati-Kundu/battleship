@@ -89,11 +89,16 @@ google.devrel.samples.ttt.clickSquare = function(e) {
     google.devrel.samples.ttt.waitingForMove = false;
 
     var boardString = google.devrel.samples.ttt.getBoardString();
+//    console.log(boardString);
     var status = google.devrel.samples.ttt.checkForVictory(boardString);
+    
     if (status == google.devrel.samples.ttt.NOT_DONE) {
+ //   	console.log("***");
       google.devrel.samples.ttt.getComputerMove(boardString);
     } else {
-      google.devrel.samples.ttt.handleFinish(status);
+ //   	console.log("***&");
+ //     google.devrel.samples.ttt.handleFinish(status);
+    	google.devrel.samples.ttt.getComputerMove(boardString);
     }
   }
 };
@@ -114,9 +119,24 @@ google.devrel.samples.ttt.resetGame = function() {
 };
 
 /**
+ * Gets whether hit or miss
+ */
+google.devrel.samples.ttt.getComputerMove = function(boardString) {
+	gapi.client.tictactoe.board.gethit({'state': boardString}).execute(function(resp) {
+		console.log(resp.sunk);
+		console.log(resp.allSunk);
+		google.devrel.samples.ttt.setBoardFilling(resp.state);
+		
+		if(resp.allSunk == false) {  // To be changed later to handle game ending cases.
+			google.devrel.samples.ttt.waitingForMove = true;
+		}
+	});
+};
+
+/**
  * Gets the computer's move.
  * @param {string} boardString Current state of the board.
- */
+ 
 google.devrel.samples.ttt.getComputerMove = function(boardString) {
   gapi.client.tictactoe.board.getmove({'state': boardString}).execute(
       function(resp) {
@@ -128,7 +148,7 @@ google.devrel.samples.ttt.getComputerMove = function(boardString) {
       google.devrel.samples.ttt.waitingForMove = true;
     }
   });
-};
+}; */
 
 /**
  * Sends the result of the game to the server.
@@ -141,6 +161,12 @@ google.devrel.samples.ttt.sendResultToServer = function(status) {
     google.devrel.samples.ttt.queryScores();
   });
 };
+
+google.devrel.samples.ttt.boardCreate = function() {
+	gapi.client.tictactoe.board.create().execute(function(resp) {
+		
+	});
+}
 
 /**
  * Queries for results of previous games.
@@ -183,7 +209,18 @@ google.devrel.samples.ttt.setBoardFilling = function(boardString) {
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
     var button = buttons[i];
+//    button.innerHTML = "<font color='black'>" + "X" + "</font>"; //boardString.charAt(i);
     button.innerHTML = boardString.charAt(i);
+//    if(boardString.charAt(i) == 'H') button.style.color = "red";
+    if((boardString.charAt(i) != 'H') && (boardString.charAt(i) != 'S')) button.style.color = "black"; 
+    	else { 
+    		button.style.color = "red"; 
+    		/*
+    		if (boardString.charAt(i) == 'S') {
+    			button.innerHTML = "<S>"+ button.innerHTML +"</S>";
+    		}*/
+    	}
+    
   }
 };
 
@@ -300,6 +337,7 @@ google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
     document.getElementById('userLabel').innerHTML = tokenEmail;
     google.devrel.samples.ttt.setBoardEnablement(true);
     google.devrel.samples.ttt.queryScores();
+    google.devrel.samples.ttt.boardCreate(); // Added by me to initialize the board
   }
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
 

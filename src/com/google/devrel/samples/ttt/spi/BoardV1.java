@@ -15,12 +15,17 @@
 
 package com.google.devrel.samples.ttt.spi;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
+import java.util.List;
 import java.util.Random;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.devrel.samples.ttt.Board;
 import com.google.devrel.samples.ttt.ComputerBoard;
+import com.google.devrel.samples.ttt.OfyService;
+
 
 /**
  * Defines v1 of a Board resource as part of the tictactoe API, which provides
@@ -34,9 +39,92 @@ import com.google.devrel.samples.ttt.ComputerBoard;
     audiences = {Ids.ANDROID_AUDIENCE}
 )
 public class BoardV1 {
+  public static final int NUM_SHIPS = 5;
+  public static final int MAX_LENGTH = 5;
+  
+  public static final int NUM_ROWS = 10;
+  public static final int NUM_COLS = 10;
+  
   public static final char X = 'X';
+  public static final char R = 'H';  // H for hit
+  public static final char B = 'M';  // M for miss
+  public static final char S = 'S';	 // Sunk
   public static final char O = 'O';
   public static final char DASH = '-';
+  
+  @ApiMethod(name = "board.create")
+  public void createBoard() {
+	  ComputerBoard CG = new ComputerBoard();
+	  CG.placeShips();
+	  ofy().save().entity(CG).now();
+	  
+	  // Debugging
+	  /*
+	  for (int i = 0; i < 5; i++) {
+  		for (int j = 0; j < 5; j++) {
+  			System.out.println(CG.shipLoc[i][j]);
+  		}
+  		System.out.println("******");
+	  } */
+	  
+	  // Debugging objectify
+	  /*
+	  System.out.println("Done with save");
+	  List<ComputerBoard> s1 = OfyService.ofy().load().type(ComputerBoard.class).list();
+	  System.out.println("Done with load");	  
+	  for ( ComputerBoard str : s1 ) {
+		  System.out.println(str.mynum);
+	  }
+	  System.out.println("Done with everything"); */
+	  return;
+  }
+  
+  @ApiMethod(name = "board.gethit", httpMethod = "POST")
+	  public ComputerBoard getHit(ComputerBoard inputboard) {
+	  String incomingState = inputboard.getState();  
+	  char[] incomingStateChars = incomingState.toCharArray();
+		  List<ComputerBoard> s1 = OfyService.ofy().load().type(ComputerBoard.class).list();
+		  for ( ComputerBoard str : s1 ) {
+	//		  System.out.println(str.id);
+			  for (int i = 0; i < NUM_ROWS; i++) {
+				  for (int j = 0; j < NUM_COLS; j++) {
+				//	  str.hasShip[i][j] = true; // Only for testing
+					  if(incomingStateChars[i*NUM_COLS + j] != DASH) {
+						  if(str.hasShip[i][j])
+							  incomingStateChars[i*NUM_COLS + j] = R;
+						  else incomingStateChars[i*NUM_COLS + j] = B;
+					  }
+					  else incomingStateChars[i*NUM_COLS + j] = DASH;
+				  }
+			  }
+			  int sunkcount = 0;
+			  for (int i = 0; i < NUM_SHIPS; i++) {
+				  int hitcount = 0;
+				  for (int j = 0; j < str.SHIP_LENGTHS[i]; j++) {
+					  if(incomingStateChars[str.shipLoc[i][j]] == R) {
+						  hitcount++;
+					  }
+				  }
+				  if (hitcount == str.SHIP_LENGTHS[i]) str.sunk[i] = true;
+				  if(str.sunk[i]) {
+					  sunkcount++;
+					  inputboard.sunk[i] = true;
+		//			  System.out.println("Sunk " + i);
+					  for (int j = 0; j < str.SHIP_LENGTHS[i]; j++) {
+						  incomingStateChars[str.shipLoc[i][j]] = S;
+					  }
+				  }
+			  }
+			  if (sunkcount == NUM_SHIPS) {
+				  str.allSunk = true;
+				  inputboard.allSunk = true;
+			  }
+		  } 
+		  
+	  inputboard.setState(String.valueOf(incomingStateChars));
+//      System.out.println(String.valueOf(incomingStateChars));
+	  return inputboard;
+  }
   
   /**
    * Provides the ability to insert a new Score entity.
@@ -57,8 +145,8 @@ public class BoardV1 {
     Board updated = new Board();
     updated.setState(builder.toString());
     
-    ComputerBoard CG = new ComputerBoard();
-    CG.placeShips();
+//    ComputerBoard CG = new ComputerBoard();
+//    CG.placeShips();
     
     return updated;
   }
