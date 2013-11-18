@@ -107,12 +107,17 @@ google.devrel.samples.ttt.clickSquare = function(e) {
  * Resets the game board.
  */
 google.devrel.samples.ttt.resetGame = function() {
+	google.devrel.samples.ttt.boardCreate();
+	document.getElementById('moves').innerHTML = '';
+	document.getElementById('sinking').innerHTML = '';
+	
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
     var button = buttons[i];
     button.removeEventListener('click', google.devrel.samples.ttt.clickSquare);
     button.addEventListener('click', google.devrel.samples.ttt.clickSquare);
     button.innerHTML = '-';
+    button.style.color = 'black';
   }
   document.getElementById('victory').innerHTML = '';
   google.devrel.samples.ttt.waitingForMove = true;
@@ -127,7 +132,7 @@ google.devrel.samples.ttt.getComputerMove = function(boardString) {
 //		console.log(resp.allSunk);
 		google.devrel.samples.ttt.setBoardFilling(resp.state);
 	//	var prevCount = resp.sinkCount;
-		console.log(resp.sinkDiff);
+//		console.log(resp.sinkDiff);
 		if (resp.sinkDiff){
 		
 			var sinkarr = resp.sunk;
@@ -155,6 +160,22 @@ google.devrel.samples.ttt.getComputerMove = function(boardString) {
 			google.devrel.samples.ttt.waitingForMove = true;
 		}
 		else {
+			var sinking = document.getElementById('sinking');
+			sinking.innerHTML = 'You sunk all ships!<br>';
+			sinking.style.color = "red";
+			var statearr = resp.state;
+			var count = 0;
+			for(var i = 0; i < statearr.length; i++) {
+				if (statearr.charAt(i) != '-') {
+					count++;
+				}
+			}
+//			console.log(statearr);
+//			console.log(statearr.length);
+//			console.log(count);
+			var moves = document.getElementById('moves');
+			moves.innerHTML = 'You needed ' + count + ' moves!<br>';
+			moves.style.color = "green";
 			// Print how many moves needed
 		}
 	});
@@ -198,6 +219,7 @@ google.devrel.samples.ttt.boardCreate = function() {
 /**
  * Queries for results of previous games.
  */
+
 google.devrel.samples.ttt.queryScores = function() {
   gapi.client.tictactoe.scores.list().execute(function(resp) {
     var history = document.getElementById('gameHistory');
@@ -210,7 +232,7 @@ google.devrel.samples.ttt.queryScores = function() {
       }
     }
   });
-};
+};     
 
 /**
  * Shows or hides the board and game elements.
@@ -363,7 +385,7 @@ google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
     google.devrel.samples.ttt.signedIn = true;
     document.getElementById('userLabel').innerHTML = tokenEmail;
     google.devrel.samples.ttt.setBoardEnablement(true);
-    google.devrel.samples.ttt.queryScores();
+ //   google.devrel.samples.ttt.queryScores();
     google.devrel.samples.ttt.boardCreate(); // Added by me to initialize the board
   }
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
