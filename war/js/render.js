@@ -53,6 +53,7 @@ google.devrel.samples.ttt.SCOPES =
  *                  if one can't be parsed.
  */
 google.devrel.samples.ttt.getEmailFromIDToken = function(idToken) {
+	console.log(idToken);
   if (typeof idToken !== 'string') {
     return;
   }

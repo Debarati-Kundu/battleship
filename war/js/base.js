@@ -216,6 +216,13 @@ google.devrel.samples.ttt.boardCreate = function() {
 	});
 }
 
+/*google.devrel.samples.ttt.boardChannel = function(tokenEmail) {
+	console.log(tokenEmail);
+	gapi.client.tictactoe.board.getchannel({'User': tokenEmail}).execute(function(resp) {
+		
+	});
+}*/
+
 /**
  * Queries for results of previous games.
  */
@@ -379,6 +386,7 @@ google.devrel.samples.ttt.getStringsAtPositions = function(boardString, first,
  * @param {string} tokenEmail The email parsed from the auth/ID token.
  */
 google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
+	console.log(tokenEmail);
   // Loads the Tic Tac Toe API asynchronously, and triggers login
   // in the UI when loading has completed.
   var callback = function() {
@@ -387,6 +395,7 @@ google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
     google.devrel.samples.ttt.setBoardEnablement(true);
  //   google.devrel.samples.ttt.queryScores();
     google.devrel.samples.ttt.boardCreate(); // Added by me to initialize the board
+//    google.devrel.samples.ttt.boardChannel(tokenEmail);
   }
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
 

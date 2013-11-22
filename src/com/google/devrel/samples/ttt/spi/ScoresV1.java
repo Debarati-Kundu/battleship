@@ -77,6 +77,8 @@ public class ScoresV1 {
       query.setOrdering("played desc");
     }
     
+//    System.out.println(user);   
+    
     if (user != null) {
       query.setFilter("player == userParam");
       query.declareParameters("com.google.appengine.api.users.User userParam");

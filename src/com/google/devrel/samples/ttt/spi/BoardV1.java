@@ -22,6 +22,11 @@ import java.util.Random;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.appengine.api.channel.ChannelService;
+import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.devrel.samples.ttt.Board;
 import com.google.devrel.samples.ttt.ComputerBoard;
 import com.google.devrel.samples.ttt.OfyService;
@@ -51,6 +56,19 @@ public class BoardV1 {
   public static final char S = 'S';	 // Sunk
   public static final char O = 'O';
   public static final char DASH = '-';
+  
+  /*
+   * Testing out channel API
+   */
+  @ApiMethod(name = "board.getchannel" ,httpMethod = "GET")
+  public void getChannel(User user) {
+	  ChannelService channelService = ChannelServiceFactory.getChannelService();
+	  System.out.println(channelService);
+	  final UserService userService = UserServiceFactory.getUserService();
+	  System.out.println(userService.getCurrentUser());
+	  System.out.println(user);
+	  return;
+  }
   
   @ApiMethod(name = "board.create")
   public void createBoard() {
@@ -204,4 +222,5 @@ public class BoardV1 {
     // Only occurs when empty > the number of actual empty squares.
     return board;
   }
+   
 }
