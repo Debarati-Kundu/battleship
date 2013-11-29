@@ -11,6 +11,8 @@ public class OfyService {
     static {
     	factory().register(ComputerBoard.class);
     	factory().register(Cell.class);
+    	factory().register(BattleshipGame.class);
+    	factory().register(myToken.class);
     }
 
     public static Objectify ofy() {

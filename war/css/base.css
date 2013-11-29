@@ -21,7 +21,7 @@ body {
   padding: 0px;
   font-size: 18pt;
   font-family: "Open Sans", "Helvetica", "Arial";
-/* background-image:url("/images/ship.jpg"); */
+  background:url("/images/water.gif"); 
 }
 #content {
   width: 100%;
@@ -86,21 +86,32 @@ body {
 }
 
 /* Board styles */
+
 table {
   text-align: center;
-  padding: 5pt 0pt;
-  border-spacing: 0pt;
-}
+/*  padding: 5pt 0pt;
+  border-spacing: 0pt; */
+} 
+
 td {
+/*	
   width: 1.5em;
   height: 1.5em;
+  */
   border: 1pt solid #000;
   -webkit-transition: all .1s;
   -moz-transition: all .1s;
   transition: all .1s;
+  cellpadding: 10;
+  
 }
+
+td:between {
+  cellspacing: 10pt;
+}
+
 td:hover {
-  background: #D3E3E8;
+/*  background: #D3E3E8; */
 }
 td:active {
   background: #CFF4FF;
@@ -149,3 +160,55 @@ td.noBottom {
     text-align:center;
     display:block;
 }
+
+div.draggable {
+	/*
+    background: #cfc;
+    padding: 1em; 
+	width: 90px; height: 25px; */
+}
+
+.rotated { 
+	transform:rotate(90deg); 
+	-webkit-transform:rotate(90deg); 
+	-moz-transform:rotate(90deg); 
+	-o-transform:rotate(90deg); 
+	}
+
+.empty {
+	
+}	
+	/*
+	       <!--  
+        <table>       
+          <tr>
+         <td class="noTop noLeft">-</td> 
+            <td class="noTop">-</td>
+            <td class="noTop noRight">-</td>
+          </tr>
+          <tr>
+            <td class="noLeft">-</td>
+            <td>-</td>
+            <td class="noRight">-</td>
+          </tr>
+          <tr>
+            <td class="noBottom noLeft">-</td>
+            <td class="noBottom">-</td>
+            <td class="noBottom noRight">-</td>
+          </tr>
+          
+        </table> 
+        
+        <script type="text/javascript">
+        	var mytable = "<table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>";
+	        for (var i = 0; i < 10; i++) {
+	        	mytable += "</tr><tr>";
+	        	for (var j = 0; j < 10; j++) {
+	        		mytable += "<td>-</td>";
+	          }         
+	        }
+        	mytable += "</tr></tbody></table>";
+        	document.write(mytable);
+        </script>
+        
+        -->*/

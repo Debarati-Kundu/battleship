@@ -17,19 +17,28 @@ package com.google.devrel.samples.ttt.spi;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.devrel.samples.ttt.BattleshipGame;
 import com.google.devrel.samples.ttt.Board;
 import com.google.devrel.samples.ttt.ComputerBoard;
 import com.google.devrel.samples.ttt.OfyService;
+import com.google.devrel.samples.ttt.myToken;
 
 
 /**
@@ -56,19 +65,21 @@ public class BoardV1 {
   public static final char S = 'S';	 // Sunk
   public static final char O = 'O';
   public static final char DASH = '-';
+ 
+@ApiMethod(name = "board.getUserShips")
+
+public void getUserShips(ComputerBoard inputuserboard) {
+	String presentGameid = inputuserboard.getGameID();
+	List<BattleshipGame> s1 = OfyService.ofy().load().type(BattleshipGame.class).list();
+	for(BattleshipGame str : s1 ) {		
+		if (str.getKey().equals(presentGameid)) {
+			str.BoardUserA = inputuserboard;
+			System.out.println(str.BoardUserB.getState());
+		}
+	}
+	return;
+} 
   
-  /*
-   * Testing out channel API
-   */
-  @ApiMethod(name = "board.getchannel" ,httpMethod = "GET")
-  public void getChannel(User user) {
-	  ChannelService channelService = ChannelServiceFactory.getChannelService();
-	  System.out.println(channelService);
-	  final UserService userService = UserServiceFactory.getUserService();
-	  System.out.println(userService.getCurrentUser());
-	  System.out.println(user);
-	  return;
-  }
   
   @ApiMethod(name = "board.create")
   public void createBoard() {
@@ -136,12 +147,8 @@ public class BoardV1 {
 			  if (!sunkcount.equals(str.sinkCount)) str.sinkDiff = true;
 			  	else str.sinkDiff = false;
 			  
-//			  if ((sunkcount - str.sinkCount) != 0) {str.sinkDiff = true;}
-//			  System.out.println(sunkcount + " " + str.sinkCount + " " + str.sinkDiff);
 			  str.sinkCount = sunkcount;
 			  if (sunkcount == NUM_SHIPS) {
-				  
-			//	  System.out.println(str.sinkCount);
 				  str.allSunk = true;
 				  str.sinkCount = sunkcount;
 				  inputboard.allSunk = true;
@@ -152,7 +159,6 @@ public class BoardV1 {
 		  } 
 	  
 	  inputboard.setState(String.valueOf(incomingStateChars));
-//      System.out.println(String.valueOf(incomingStateChars));
 	  return inputboard;
   }
   
@@ -222,5 +228,82 @@ public class BoardV1 {
     // Only occurs when empty > the number of actual empty squares.
     return board;
   }
-   
+ 
+  /*
+   * Testing out channel API
+   * Mainly for testing purposes
+   */
+  @ApiMethod(name = "board.getchannel")
+  public myToken getChannel(User user) {
+	  
+	  ChannelService channelService = ChannelServiceFactory.getChannelService();
+	  String token = channelService.createChannel(user.getEmail());
+	  myToken mt = new myToken();
+	  mt.setState(token);
+	  return mt;
+  }
+  
+  // Returns if hit or miss
+  // Piggyback server's move???
+  @ApiMethod(name = "board.getusermove", httpMethod = "POST")
+  public myToken getUserMove(myToken mt) {
+	  myToken mt1 = new myToken();
+	  mt1.setGameID("XXX");
+	  String result = "MISS";
+	  Integer x = Integer.valueOf(mt.getState());
+	  List<BattleshipGame> s1 = OfyService.ofy().load().type(BattleshipGame.class).list(); 
+	  for ( BattleshipGame str : s1 ) {
+		  String temp1 = str.getKey();
+		  String temp2 = mt.getGameID();
+		  if(temp1.equals(temp2)) {
+			  Integer row = x/10;
+			  Integer col = x%10;
+			  if(str.BoardUserB.hasShip[row][col] == true) {
+				  result = "HIT";
+				  str.BoardUserA.opponentHasShip[row][col] = true;
+				  Integer whichShip = str.BoardUserB.shipNumber[row][col];
+				  str.BoardUserB.numHits[whichShip]++;
+				  if(str.BoardUserB.numHits[whichShip].equals(str.BoardUserB.SHIP_LENGTHS[whichShip])) {
+					  System.out.println(str.BoardUserB.SHIP_NAMES[whichShip] + " sunk");
+					  str.BoardUserB.sunk[whichShip] = true;
+					  str.BoardUserA.opponentSunk[whichShip] = true;
+					  mt1.setGameID(str.BoardUserB.SHIP_NAMES[whichShip]);
+				  }
+			  }
+			  // Add code for server's move iff there is no winning yet, otherwise stop
+			  //Maybe create a separate endpoint. :-? 
+		  }
+	  }
+	  
+	  mt1.setState(result);
+	  return mt1; 
+  }
+  
+  
+  @ApiMethod(name = "board.gamecreate")
+  public myToken newGame() {
+	  BattleshipGame BG = new BattleshipGame();
+	  String k1 = BG.getKey();
+	  BG.BoardUserB.setGameID(k1); 
+	  BG.BoardUserB.placeShips();   // We are creating arrangements by server as soon as the user logs in
+	  ofy().save().entity(BG).now();		   
+	  myToken mt = new myToken();
+	  mt.setState(k1);
+//	  System.out.println(k1);
+
+	  // Debugging
+	  /*
+	  System.out.println("After objectify save");	  
+	  List<BattleshipGame> s1 = OfyService.ofy().load().type(BattleshipGame.class).list();
+	  System.out.println("Done with load");	  
+	  for ( BattleshipGame str : s1 ) {
+		  System.out.println(str.id);
+	  }
+	  System.out.println("Done with everything"); */
+	  
+	  return mt;
+  }
+/*
+
+  */
 }

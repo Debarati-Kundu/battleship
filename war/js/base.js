@@ -11,6 +11,9 @@
 /** google global namespace for Google projects. */
 var google = google || {};
 
+function IsNumeric(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+function pow10(n) {if (n == 0) return 1; else return 10;}
+
 /** devrel namespace for Google Developer Relations projects. */
 google.devrel = google.devrel || {};
 
@@ -55,6 +58,19 @@ google.devrel.samples.ttt.STATUS_STRINGS = [
     'TIE'
 ];
 
+// Variables pertaining to ship arrangement by the user
+var v0 = 0, v1 = 0, v2 = 0, v3 = 0, v4 = 0;
+var myboard1 = new Array();
+for (var i = 0; i < 100; i++)
+	myboard1[i] = '-';
+var shiplocation = new Array();
+for (var i = 0; i < 5; i++)  { 
+	shiplocation[i] = new Array(); 
+	for (var j = 0; j < 5; j++)  {
+		shiplocation[i][j] = -1;
+	}
+}
+var gameID;
 /**
  * Whether or not the user is signed in.
  * @type {boolean}
@@ -210,19 +226,59 @@ google.devrel.samples.ttt.sendResultToServer = function(status) {
   });
 };
 
+google.devrel.samples.ttt.gameCreate = function() {
+	gapi.client.tictactoe.board.gamecreate().execute(function(resp) {
+		gameID = resp.state;
+//		console.log(gameID);
+	});
+}
+
 google.devrel.samples.ttt.boardCreate = function() {
 	gapi.client.tictactoe.board.create().execute(function(resp) {
 		
 	});
 }
-
-/*google.devrel.samples.ttt.boardChannel = function(tokenEmail) {
-	console.log(tokenEmail);
-	gapi.client.tictactoe.board.getchannel({'User': tokenEmail}).execute(function(resp) {
-		
+/*
+google.devrel.samples.ttt.boardChannel = function() {
+	gapi.client.tictactoe.board.getchannel().execute(function(resp) {
+		responseToken(resp.state);		
 	});
-}*/
+}
 
+responseToken = function(token) {
+//	console.log(token);
+	var channel = new goog.appengine.Channel(token);
+//	console.log(channel);
+	var socket = channel.open();
+//	console.log(socket);
+	socket.onopen = onSocketOpen;
+//	socket.onmessage = onSocketMessage;
+	socket.onerror = onSocketError;
+	socket.onclose = onSocketClose;
+}
+
+onSocketError = function(error){
+	alert("Error is <br/>"+error.description+" <br /> and HTML code"+error.code);
+};
+
+onSocketOpen = function() {
+	// socket opened
+};
+
+onSocketClose = function() {
+	alert("Socket Connection closed");
+};
+
+sendMessage = function(path, opt_param) {
+	  path += '?g=' + state.game_key;
+	  if (opt_param) {
+	    path += '&' + opt_param;
+	  }
+	  var xhr = new XMLHttpRequest();
+	  xhr.open('POST', path, true);
+	  xhr.send();
+	};
+*/
 /**
  * Queries for results of previous games.
  */
@@ -354,6 +410,31 @@ google.devrel.samples.ttt.handleFinish = function(status) {
 };
 
 /**
+ * Gets the current configuration of the user's ships.
+ * @return {string} Current state of the board.
+ */
+
+google.devrel.samples.ttt.getUserBoardString = function(e) {
+	var button = e.target;
+	button.removeEventListener('click', google.devrel.samples.ttt.getUserBoardString);
+	var userBoardStrings = [];
+	for(var i = 0; i < 100; i++) {
+		userBoardStrings.push(myboard1[i]);
+	}
+	gapi.client.tictactoe.board.getUserShips({'state': userBoardStrings.join(''), 'shipLoc' : shiplocation
+		, 'gameID' : gameID}).execute(function(resp) {
+//		console.log(userBoardStrings.join(''));
+	}); 
+	
+/*	  var boardStrings = [];
+	  var buttons = document.querySelectorAll('td');
+	  for (var i = 0; i < buttons.length; i++) {
+	    boardStrings.push(buttons[i].innerHTML);
+	  }
+	  return boardStrings.join(''); */
+};
+	
+/**
  * Gets the current representation of the board.
  * @return {string} Current state of the board.
  */
@@ -386,25 +467,166 @@ google.devrel.samples.ttt.getStringsAtPositions = function(boardString, first,
  * @param {string} tokenEmail The email parsed from the auth/ID token.
  */
 google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
-	console.log(tokenEmail);
+//	console.log(tokenEmail);
   // Loads the Tic Tac Toe API asynchronously, and triggers login
   // in the UI when loading has completed.
   var callback = function() {
     google.devrel.samples.ttt.signedIn = true;
     document.getElementById('userLabel').innerHTML = tokenEmail;
     google.devrel.samples.ttt.setBoardEnablement(true);
- //   google.devrel.samples.ttt.queryScores();
-    google.devrel.samples.ttt.boardCreate(); // Added by me to initialize the board
-//    google.devrel.samples.ttt.boardChannel(tokenEmail);
+//    google.devrel.samples.ttt.queryScores();
+//    google.devrel.samples.ttt.boardCreate(); // Added by me to initialize the board
+//    google.devrel.samples.ttt.boardChannel();
+    google.devrel.samples.ttt.gameCreate();
   }
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
 
+  /*
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
     var button = buttons[i];
-    button.addEventListener('click', google.devrel.samples.ttt.clickSquare);
-  }
+//    console.log(button.id);
+    if(IsNumeric(button.id))
+    	button.addEventListener('click', google.devrel.samples.ttt.clickSquare);
+  } */
 
+  var place = document.querySelector('#placedShips');
+  place.addEventListener('click', google.devrel.samples.ttt.getUserBoardString);
+  
   var reset = document.querySelector('#restartButton');
   reset.addEventListener('click', google.devrel.samples.ttt.resetGame);
 };
+
+google.devrel.samples.ttt.clickCell = function(e) {
+	if (google.devrel.samples.ttt.waitingForMove) {
+		var button = e.target;
+		button.removeEventListener('click', google.devrel.samples.ttt.clickCell);
+//	    google.devrel.samples.ttt.waitingForMove = false;	    
+		var temp = button.id - 100;
+//		console.log(temp);
+		
+		//Sends user's move to server and gets back if it was a hit or miss
+		gapi.client.tictactoe.board.getusermove({'state' : temp, 'gameID' : gameID}).execute(function(resp) {	
+			if(resp.state == "MISS") {
+				button.innerHTML = 'M';
+				button.style.color = 'black';
+			} else {
+				button.innerHTML = 'H';
+				button.style.color = 'red';
+			}	
+			var temp;
+			if(resp.gameID != "XXX") {
+				var sinking = document.getElementById('sinking');
+				sinking.innerHTML += resp.gameID + " sunk!";
+				sinking.innerHTML += '<br>';				
+			}
+		});
+	}
+}
+
+
+drag_rotate = function() {
+    $('.draggable').draggable();
+    $('.rotated').draggable();	    
+    $('.draggable').click(function() {
+        $('.draggable').toggleClass('rotated');
+        if(v0 == 0) v0 = 1;
+        else v0 = 0;
+        console.log(v0);
+    }); 
+    
+    $('.draggable1').draggable(); 
+    $('.rotated').draggable();	   
+    $('.draggable1').click(function() {
+        $(this).toggleClass('rotated');
+        if(v1 == 0) v1 = 1;
+        else v1 = 0;
+        console.log(v1);
+    }); 
+    
+    $('.draggable2').draggable();
+    $('.rotated').draggable();	   
+    $('.draggable2').click(function() {
+        $(this).toggleClass('rotated');
+        if(v2 == 0) v2 = 1;
+        else v2 = 0;
+        console.log(v2);
+    }); 
+    
+    $('.draggable3').draggable(); 
+    $('.rotated').draggable();	   
+    $('.draggable3').click(function() {
+        $(this).toggleClass('rotated');
+        if(v3 == 0) v3 = 1;
+        else v3 = 0;
+        console.log(v3);
+    }); 
+    
+    $('.draggable4').draggable();
+    $('.rotated').draggable();	   
+    $('.draggable4').click(function() {
+        $(this).toggleClass('rotated');
+        if(v4 == 0) v4 = 1;
+        else v4 = 0;
+        console.log(v4);
+    }); 
+    
+    $(".cell").droppable({
+        drop: function(event,ui) {
+        	var shipname = ui.helper.attr('id');
+        	var temp = $(this).attr("id");
+    		var row, col;    		
+        	if (shipname == "Aircraft carrier") {
+        		row = Math.floor(temp/12);
+        		col = (temp%12) - 2;
+        			for (var i = 0; i < 5; i++) {
+        				var index = 10*row + col + i*pow10(v0);
+        				myboard1[index] = 'A';
+        				shiplocation[0][i] = index;
+        			}   			       		
+        	}
+        	if (shipname == "Battleship") {
+        			row = Math.floor(temp/12);
+        		if (v1 == 0)        		
+        			col = (temp%12) - 1; 
+        		else col = (temp%12) - 1;  
+        			for (var i = 0; i < 4; i++) {
+        				var index =10*row + col + i*pow10(v1);
+        				myboard1[index] = 'B';
+        				shiplocation[1][i] = index;
+        		}
+        	}
+        	if (shipname == "Destroyer") {
+        			row = Math.floor(temp/12);
+        			col = (temp%12) - 1; 
+            			for (var i = 0; i < 3; i++) {
+            				var index = 10*row + col + i*pow10(v2);
+            				myboard1[index] = 'D';
+            				shiplocation[2][i] = index;
+            			}      			
+        	}
+        	if (shipname == "Submarine") {
+    			row = Math.floor(temp/12);
+    			col = (temp%12) - 1; 
+        			for (var i = 0; i < 3; i++) {
+        				var index = 10*row + col + i*pow10(v3);
+        				myboard1[index] = 'S';
+        				shiplocation[3][i] = index;
+        			}
+        	}
+        	if (shipname == "Patrol Boat") {
+        		row = Math.floor(temp/12);
+        		col = (temp%12);  
+        			for (var i = 0; i < 2; i++) {
+        				var index = 10*row + col + i*pow10(v4);
+        				myboard1[index] = 'P';
+        				shiplocation[4][i] = index;
+        			}
+        	}
+        	alert(ui.helper.attr('id') + " placed in " + row + " " + col);
+  //      	console.log(myboard1);
+  //      	console.log(shiplocation);
+  //      	ui.draggable("disable");        	
+        }
+    });
+}

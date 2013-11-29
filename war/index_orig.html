@@ -5,9 +5,6 @@
     <title>BattleShip</title>
     <!-- Reference: https://developers.google.com/appengine/docs/java/channel/javascript -->
     <script type="text/javascript" src="/_ah/channel/jsapi"></script>
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-	
     <script type="text/javascript" src="/js/base.js"></script>
     <link rel="stylesheet" href="/css/base.css" />
     <script type="text/javascript" src="/js/render.js"></script>
@@ -34,21 +31,41 @@
       <div id="restartButton"><a href="#">Restart</a></div>
       <div id="instructions">Please click on the grid below to reveal the computer's fleet arrangement. H means a hit,
       M means miss, and S means sunk ship.</div>
-
-       
-<table id="shiparrange">
-		<tr>
-		<td class="noTop noLeft noRight noBottom"><div><img src="/images/AC.gif"  id="Aircraft carrier" class="draggable"/></div> </td>
-		<td class="noTop noLeft noRight noBottom"><div><img src="/images/BS.gif"  id="Battleship" class="draggable1"/></div> </td>
-		<td class="noTop noLeft noRight noBottom"><div><img src="/images/Dest.gif"  id="Destroyer" class="draggable2"/></div> </td>
-		<td class="noTop noLeft noRight noBottom"><div><img src="/images/Sub.gif"  id="Submarine" class="draggable3"/></div> </td>
-		<td class="noTop noLeft noRight noBottom"><div><img src="/images/Boat.gif"  id="Patrol Boat" class="draggable4"/></div> </td>
-		</tr>
-</table>    
-<button type="button" id="placedShips">Placed!</button>           
+       <!--  
+        <table>       
+          <tr>
+         <td class="noTop noLeft">-</td> 
+            <td class="noTop">-</td>
+            <td class="noTop noRight">-</td>
+          </tr>
+          <tr>
+            <td class="noLeft">-</td>
+            <td>-</td>
+            <td class="noRight">-</td>
+          </tr>
+          <tr>
+            <td class="noBottom noLeft">-</td>
+            <td class="noBottom">-</td>
+            <td class="noBottom noRight">-</td>
+          </tr>
+          
+        </table> 
+        
+        <script type="text/javascript">
+        	var mytable = "<table cellpadding=\"0\" cellspacing=\"0\"><tbody><tr>";
+	        for (var i = 0; i < 10; i++) {
+	        	mytable += "</tr><tr>";
+	        	for (var j = 0; j < 10; j++) {
+	        		mytable += "<td>-</td>";
+	          }         
+	        }
+        	mytable += "</tr></tbody></table>";
+        	document.write(mytable);
+        </script>
+        
+        -->
     <table id="twoboards">
 	<tr>
-	 
 		<td class="noTop noLeft noRight noBottom">
 			<table id="userboard" celpadding="0" cellspacing="0"></table>
 			<script type="text/javascript">
@@ -57,24 +74,19 @@
 				myboard.innerHTML = '';
 				for (var i = 0; i < dim; i++) {
 					var row = document.createElement('tr');
-					for (var j = 0; j < dim+2; j++) {
+					for (var j = 0; j < dim; j++) {
 						var col = document.createElement('td');	
-						col.style.width="40px";
-						col.style.height="38px";
-						
-						col.id = (dim+2)*i + j;
-						if(j < dim) {
-							col.innerHTML = '-';
-							col.className = "cell";							
-						}
-						else col.className = "cell noTop noLeft noRight noBottom";
+						col.style.width="80px";
+						col.style.height="40px";
+						col.innerHTML = '-';
+						col.id = 10*i + j;
 						row.appendChild(col);
 					}
 					myboard.appendChild(row);
 				}	
 			</script>
 		</td>
-		<td width="160px" class="noTop noLeft noRight noBottom" ></td>  
+		<td width="160px" class="noTop noLeft noRight noBottom" ></td>
 		<td class="noTop noLeft noRight noBottom">
 		<table id="compboard" celpadding="0" cellspacing="0" ></table>
 			<script type="text/javascript">
@@ -85,11 +97,10 @@
 					var row = document.createElement('tr');
 					for (var j = 0; j < dim; j++) {
 						var col = document.createElement('td');	
-						col.style.width="40px";
-						col.style.height="38px";
+						col.style.width="80px";
+						col.style.height="40px";
 						col.innerHTML = '-';
 						col.id = 100 + 10*i + j;
-						col.addEventListener('click', google.devrel.samples.ttt.clickCell);
 						row.appendChild(col);
 					}
 					myboard.appendChild(row);
@@ -98,8 +109,9 @@
 		</td>
 	</tr>
 </table>
-<script>drag_rotate();</script>  
-       
+        
+        
+        
         <div id="myboard">Hits</div>
         <div id="sinking"></div>
         <div id="moves"></div>        

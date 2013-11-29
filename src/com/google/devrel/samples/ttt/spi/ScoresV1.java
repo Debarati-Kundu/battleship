@@ -39,7 +39,10 @@ import com.google.devrel.samples.ttt.Score;
     name = "tictactoe",
     version = "v1",
     clientIds = {Ids.WEB_CLIENT_ID, Ids.ANDROID_CLIENT_ID, Ids.IOS_CLIENT_ID},
-    audiences = {Ids.ANDROID_AUDIENCE}
+    audiences = {Ids.ANDROID_AUDIENCE} /*,
+	scopes = {
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile" } */
 )
 public class ScoresV1 {
   private static final String WHEN = "1";
@@ -77,7 +80,7 @@ public class ScoresV1 {
       query.setOrdering("played desc");
     }
     
-//    System.out.println(user);   
+    System.out.println();   
     
     if (user != null) {
       query.setFilter("player == userParam");

@@ -17,9 +17,12 @@ public class ComputerBoard implements Serializable{
 	} 
 	@Id
 	public Long id = 1234567L;
+	private String gameID;
+
 	private static final int NUM_SHIPS = 5;
 	private static final int NUM_ROWS = 10;
 	private static final int NUM_COLS = 10;
+	private static final int GRIDSIZE = 100;
 	
 	// lengths of the various ships in the game
     private static final int AIRCRAFT_CARRIER_LENGTH = 5;
@@ -37,7 +40,7 @@ public class ComputerBoard implements Serializable{
         SUBMARINE_LENGTH,
         PATROL_BOAT_LENGTH
     };
-    private static final String[] SHIP_NAMES =
+    public final String[] SHIP_NAMES =
         {
             "AIRCRAFT_CARRIER",
             "BATTLESHIP",
@@ -51,11 +54,24 @@ public class ComputerBoard implements Serializable{
     private String state;
     
     @Serialize
+    public char[] stateChars = new char[GRIDSIZE];
+    
+    public void setStateFromBoard() {
+    	stateChars = state.toCharArray();
+    	System.out.println(stateChars);
+    	return;
+    }
+    
+    @Serialize
 	public boolean[][] hasShip = new boolean[NUM_ROWS][NUM_COLS];
     @Serialize
     public String[][] shipName = new String[NUM_ROWS][NUM_COLS];
     @Serialize
+    public Integer[][] shipNumber = new Integer[NUM_ROWS][NUM_COLS];
+    @Serialize
     public int[][] shipLoc = new int[NUM_SHIPS][AIRCRAFT_CARRIER_LENGTH];
+    @Serialize
+    public Integer[] numHits = new Integer[NUM_SHIPS];
     @Serialize
     public boolean[] sunk = new boolean[NUM_SHIPS];
     
@@ -63,23 +79,42 @@ public class ComputerBoard implements Serializable{
     public Integer sinkCount = 0;
     public boolean sinkDiff;
     
+    // We also need to save information about the opponent
+    @Serialize
+	public boolean[][] opponentHasShip = new boolean[NUM_ROWS][NUM_COLS];
+    @Serialize
+    public boolean[] opponentSunk = new boolean[NUM_SHIPS];
+    
 //    @Serialize
 //	public Cell[][] ComputerGrid = new Cell[NUM_ROWS][NUM_COLS];
     
     public ComputerBoard() {
     	for (int i = 0; i < NUM_ROWS; i++) {
         	for (int j = 0; j < NUM_COLS; j++) {
+        		stateChars[10*i+j] = '-';
         		this.hasShip[i][j] = false;
         		this.shipName[i][j] = "XXX";
+        		this.shipNumber[i][j] = -1;
    //     		this.ComputerGrid[i][j] = new Cell();
         	}
         }
+    	
+    	// Assume that you don't know anything about the opponent when you begin the game
+    	for (int i = 0; i < NUM_ROWS; i++) {
+        	for (int j = 0; j < NUM_COLS; j++) {
+        		this.opponentHasShip[i][j] = false;
+        	}
+    	}
+    	for (int i = 0; i < NUM_SHIPS; i++) 
+    		this.opponentSunk[i] = false;
+    	
     	
     	// Stores the indices for each ship
     	for (int i = 0; i < NUM_SHIPS; i++) {
     		for (int j = 0; j < AIRCRAFT_CARRIER_LENGTH; j++) {
     				shipLoc[i][j] = -1;
     		}
+    		numHits[i] = 0;
     		sunk[i] = false;
     	}
     	
@@ -125,16 +160,22 @@ public class ComputerBoard implements Serializable{
         	} // End of while loop over individual ships
         	for (int j = 0; j < SHIP_LENGTHS[k]; j++) {
                 if (dir==0) {
+                	
+                	stateChars[10*row+col+j] = SHIP_NAMES[k].charAt(0);
+                	
        //         	ComputerGrid[row][col + j].hasShip = true;
         			hasShip[row][col + j] = true;
        //         	ComputerGrid[row][col + j].shipName = SHIP_NAMES[k];
+        			shipNumber[row][col + j] = k;
         			shipName[row][col + j] = SHIP_NAMES[k];
         			shipLoc[k][j] = row*NUM_COLS + col;
                 }
                 else {
           //      	ComputerGrid[row + j][col].hasShip = true;
+                	stateChars[10*(row+j)+col] = SHIP_NAMES[k].charAt(0);
                 	hasShip[row + j][col] = true;
           //      	ComputerGrid[row + j][col].shipName = SHIP_NAMES[k];
+                	shipNumber[row + j][col] = k;
                 	shipName[row + j][col] = SHIP_NAMES[k];
                 	shipLoc[k][j] = row*NUM_COLS + col;
                 }
@@ -160,21 +201,27 @@ public class ComputerBoard implements Serializable{
         		System.out.println(hasShip[i][j]);
         		System.out.println(shipName[i][j]);
         	}
-        } */
-        
-        
-        
+        } */ 
+        state = String.valueOf(stateChars);
     	return;
     } 
-
+    
+    public void printShipLoc() {
+    	for(int i = 0; i < 10; i++) {
+    		for(int j = 0; j < 10; j++) {
+    			System.out.println(shipName[i][j]);
+    		}
+    	}
+    }
     /*
 	public static int[] getShipLengths() {
 		return SHIP_LENGTHS;
 	} */
 
+    /*
 	public static String[] getShipNames() {
 		return SHIP_NAMES;
-	}
+	} */
 
 	public String getState() {
 		return state;
@@ -182,6 +229,14 @@ public class ComputerBoard implements Serializable{
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getGameID() {
+		return gameID;
+	}
+
+	public void setGameID(String gameID) {
+		this.gameID = gameID;
 	}
 
 	/*
