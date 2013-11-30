@@ -70,7 +70,10 @@ for (var i = 0; i < 5; i++)  {
 		shiplocation[i][j] = -1;
 	}
 }
+var numSunk = 0;
+var numLost = 0;
 var gameID;
+var status1 = google.devrel.samples.ttt.NOT_DONE;
 /**
  * Whether or not the user is signed in.
  * @type {boolean}
@@ -506,20 +509,56 @@ google.devrel.samples.ttt.clickCell = function(e) {
 //		console.log(temp);
 		
 		//Sends user's move to server and gets back if it was a hit or miss
-		gapi.client.tictactoe.board.getusermove({'state' : temp, 'gameID' : gameID}).execute(function(resp) {	
-			if(resp.state == "MISS") {
-				button.innerHTML = 'M';
-				button.style.color = 'black';
-			} else {
-				button.innerHTML = 'H';
-				button.style.color = 'red';
-			}	
-			var temp;
-			if(resp.gameID != "XXX") {
-				var sinking = document.getElementById('sinking');
-				sinking.innerHTML += resp.gameID + " sunk!";
-				sinking.innerHTML += '<br>';				
+		gapi.client.tictactoe.board.getusermove({'state' : temp, 'gameID' : gameID}).execute(function(resp) {
+			if(status1 == google.devrel.samples.ttt.NOT_DONE)
+				{
+					if(resp.state == "MISS") {
+						button.innerHTML = 'X';
+						button.style.color = 'black';
+					} else {
+						button.innerHTML = 'X';
+						button.style.color = 'red';
+					}	
+					
+					if(resp.gameID != "XXX") {
+						numSunk++;
+						var sinking = document.getElementById('sinking');
+						sinking.innerHTML += resp.gameID + " sunk! :-)";
+						sinking.innerHTML += '<br>';				
+					}
+				}
+			if(numSunk == 5)
+				{
+					sinking.innerHTML += "You won!";
+					status1 = google.devrel.samples.ttt.WON;					
+				}
+			if(status1 == google.devrel.samples.ttt.NOT_DONE)
+			{				
+				var temp = resp.celltarget;
+				var target = document.getElementById(temp);			
+				target.innerHTML = 'X';
+				if (resp.cellstate == "MISS")
+					target.style.color = 'black';
+				else {
+					console.log(resp.cellstate);
+					target.innerHTML = '<img src="/images/cross.gif" height="30" width="30">';
+				//	target.style.color = 'red'; 
+				}
+				if(resp.mysunk != "XXX") {
+					numLost++;
+					var lost = document.getElementById('lost');
+					lost.innerHTML += resp.mysunk + " lost! :-(";
+					lost.innerHTML += '<br>';				
+				}
+				
 			}
+			if(numLost == 5) {
+				lost.innerHTML += "You lost"; 
+				status1 = google.devrel.samples.ttt.LOST;	
+			}
+//			target.innerHTML = '<img src="/images/cross.gif" height="35" width="35">';
+//			console.log(resp.celltarget);
+//			console.log(resp.cellstate);
 		});
 	}
 }
@@ -574,7 +613,9 @@ drag_rotate = function() {
     $(".cell").droppable({
         drop: function(event,ui) {
         	var shipname = ui.helper.attr('id');
+     //   	ui.helper.attr('src', '');
         	var temp = $(this).attr("id");
+ //       	$(this).attr("src",'/images/cross.gif');
     		var row, col;    		
         	if (shipname == "Aircraft carrier") {
         		row = Math.floor(temp/12);
@@ -624,9 +665,7 @@ drag_rotate = function() {
         			}
         	}
         	alert(ui.helper.attr('id') + " placed in " + row + " " + col);
-  //      	console.log(myboard1);
-  //      	console.log(shiplocation);
-  //      	ui.draggable("disable");        	
+        	ui.draggable("disable");        	
         }
     });
 }

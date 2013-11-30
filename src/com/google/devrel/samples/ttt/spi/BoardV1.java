@@ -74,6 +74,7 @@ public void getUserShips(ComputerBoard inputuserboard) {
 	for(BattleshipGame str : s1 ) {		
 		if (str.getKey().equals(presentGameid)) {
 			str.BoardUserA = inputuserboard;
+			str.BoardUserA.setBoardFromState();
 			System.out.println(str.BoardUserB.getState());
 		}
 	}
@@ -247,10 +248,16 @@ public void getUserShips(ComputerBoard inputuserboard) {
   // Piggyback server's move???
   @ApiMethod(name = "board.getusermove", httpMethod = "POST")
   public myToken getUserMove(myToken mt) {
+	  
+	  Integer nbd_r[] = {0, -1, 0, 1};
+	  Integer nbd_c[] = {-1, 0, 1, 0};
+	  
 	  myToken mt1 = new myToken();
 	  mt1.setGameID("XXX");
+	  mt1.setMysunk("XXX");
 	  String result = "MISS";
 	  Integer x = Integer.valueOf(mt.getState());
+	  Integer index = 0;
 	  List<BattleshipGame> s1 = OfyService.ofy().load().type(BattleshipGame.class).list(); 
 	  for ( BattleshipGame str : s1 ) {
 		  String temp1 = str.getKey();
@@ -260,7 +267,7 @@ public void getUserShips(ComputerBoard inputuserboard) {
 			  Integer col = x%10;
 			  if(str.BoardUserB.hasShip[row][col] == true) {
 				  result = "HIT";
-				  str.BoardUserA.opponentHasShip[row][col] = true;
+				  str.BoardUserA.opponentHasShip[row][col] = 1;
 				  Integer whichShip = str.BoardUserB.shipNumber[row][col];
 				  str.BoardUserB.numHits[whichShip]++;
 				  if(str.BoardUserB.numHits[whichShip].equals(str.BoardUserB.SHIP_LENGTHS[whichShip])) {
@@ -269,14 +276,84 @@ public void getUserShips(ComputerBoard inputuserboard) {
 					  str.BoardUserA.opponentSunk[whichShip] = true;
 					  mt1.setGameID(str.BoardUserB.SHIP_NAMES[whichShip]);
 				  }
+			  } else {
+				  str.BoardUserA.opponentHasShip[row][col] = 0;
 			  }
+			  mt1.setState(result);
 			  // Add code for server's move iff there is no winning yet, otherwise stop
 			  //Maybe create a separate endpoint. :-? 
+			  // At the moment, just random firing by the server, Strategy v1
+			  
+			  boolean tried = true;
+			  /*
+			  while(tried) {
+				  row = (int)(Math.random()*(NUM_ROWS));
+				  col = (int)(Math.random()*(NUM_COLS));
+				  if(str.BoardUserB.opponentHasShip[row][col] == -1)
+					  tried = false;
+			  }*/
+			  
+			  ///////// Better Algorithm ////////////
+			  // Hunting Mode
+	//		  System.out.println(str.BoardUserB.stackSize());
+			  if(str.BoardUserB.isEmpty()) {
+	//			  System.out.println("Hunt mode");
+				  tried = true;
+				  while(tried) {
+					  row = (int)(Math.random()*(NUM_ROWS));
+					  col = (int)(Math.random()*(NUM_COLS));
+					  if(str.BoardUserB.opponentHasShip[row][col] == -1)
+						  tried = false;
+				  }
+				  System.out.println("Hunt mode "+row + " "+col);
+			  } else {
+				  
+				  // Target mode
+				  Integer move = str.BoardUserB.pop();
+				  row = move/10;
+				  col = move%10;
+				  System.out.println("Target mode "+row + " "+col);
+			  }
+			  
+			  
+          	  index = 12*row + col;
+          	  mt1.setCelltarget(Integer.toString(index));
+          	  
+          	  if(str.BoardUserA.hasShip[row][col] == true) {
+          		  
+          		  for (int j = 0; j < 4; j++) {
+          			  Integer r1 = row + nbd_r[j];
+          			  Integer c1 = col + nbd_c[j];
+          			  if((r1 >=0) && (r1<10) && (c1 >=0) && (c1<10)) {
+          				if(str.BoardUserB.opponentHasShip[r1][c1] == -1) { 
+          					Integer index1 = 10*r1+c1;
+          					System.out.println(row + " " + col + " " + r1 + " " + c1 + " " + index1);
+          					str.BoardUserB.push(index1);         					
+          				}
+          			  }
+          		  }
+          		  System.out.println("****");
+          		  
+          		  
+          		  mt1.setCellstate("HIT");
+          		  str.BoardUserB.opponentHasShip[row][col] = 1;
+          		  Integer whichShip = str.BoardUserA.shipNumber[row][col];
+          		  str.BoardUserA.numHits[whichShip]++;
+          		  
+          		  if(str.BoardUserA.numHits[whichShip].equals(str.BoardUserA.SHIP_LENGTHS[whichShip])) {
+					  System.out.println(str.BoardUserA.SHIP_NAMES[whichShip] + " lost");
+					  str.BoardUserA.sunk[whichShip] = true;
+					  str.BoardUserB.opponentSunk[whichShip] = true;
+					  mt1.setMysunk(str.BoardUserA.SHIP_NAMES[whichShip]);
+				  }
+          		  
+          	  } else {
+          		  str.BoardUserB.opponentHasShip[row][col] = 0;
+        		  mt1.setCellstate("MISS");
+          	  }
 		  }
-	  }
-	  
-	  mt1.setState(result);
-	  return mt1; 
+	  }	  
+	  return mt1;
   }
   
   

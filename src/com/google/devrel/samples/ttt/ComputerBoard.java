@@ -1,6 +1,7 @@
 package com.google.devrel.samples.ttt;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
@@ -50,6 +51,13 @@ public class ComputerBoard implements Serializable{
             "XXXX" // Means no ship, empty cell
         };
 
+    private LinkedList<Integer> cellsToTry = new LinkedList<Integer>();
+    public void push(Integer item) {cellsToTry.addFirst(item);}
+    public Integer pop() {return cellsToTry.removeFirst();}
+    public Integer peek() {return cellsToTry.getFirst();}
+    public int stackSize() {return cellsToTry.size();}
+    public boolean isEmpty() {return cellsToTry.isEmpty();}
+    
     public int mynum = 2;
     private String state;
     
@@ -81,7 +89,7 @@ public class ComputerBoard implements Serializable{
     
     // We also need to save information about the opponent
     @Serialize
-	public boolean[][] opponentHasShip = new boolean[NUM_ROWS][NUM_COLS];
+	public Integer[][] opponentHasShip = new Integer[NUM_ROWS][NUM_COLS];
     @Serialize
     public boolean[] opponentSunk = new boolean[NUM_SHIPS];
     
@@ -102,7 +110,7 @@ public class ComputerBoard implements Serializable{
     	// Assume that you don't know anything about the opponent when you begin the game
     	for (int i = 0; i < NUM_ROWS; i++) {
         	for (int j = 0; j < NUM_COLS; j++) {
-        		this.opponentHasShip[i][j] = false;
+        		this.opponentHasShip[i][j] = -1;
         	}
     	}
     	for (int i = 0; i < NUM_SHIPS; i++) 
@@ -119,6 +127,25 @@ public class ComputerBoard implements Serializable{
     	}
     	
     } 
+    
+    public void setBoardFromState() {
+    	stateChars = state.toCharArray();
+    	for (int i = 0; i < GRIDSIZE; i++) {
+    		int row = i/10;
+    		int col = i%10;
+    		if (stateChars[i] !='-') {
+    			hasShip[row][col] = true;
+    			if(stateChars[i] == 'A') shipNumber[row][col] = 0;
+    			if(stateChars[i] == 'B') shipNumber[row][col] = 1;
+    			if(stateChars[i] == 'D') shipNumber[row][col] = 2;
+    			if(stateChars[i] == 'S') shipNumber[row][col] = 3;
+    			if(stateChars[i] == 'P') shipNumber[row][col] = 4;
+    		}
+    	}
+//    	System.out.println(stateChars);
+    	return;
+    }
+    
     
     public void placeShips() {
     	int dir = 0;

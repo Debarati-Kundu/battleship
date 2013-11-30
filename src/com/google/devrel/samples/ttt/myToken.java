@@ -17,6 +17,9 @@ public class myToken implements Serializable {
 	public Long id = 123456789L;
 	private String state;
 	private String gameID;
+	private String celltarget;
+	private String cellstate;
+	private String mysunk;
 	
 	public String getState() {
 		return state;
@@ -29,5 +32,23 @@ public class myToken implements Serializable {
 	}
 	public void setGameID(String gameID) {
 		this.gameID = gameID;
+	}
+	public String getCellstate() {
+		return cellstate;
+	}
+	public void setCellstate(String cellstate) {
+		this.cellstate = cellstate;
+	}
+	public String getCelltarget() {
+		return celltarget;
+	}
+	public void setCelltarget(String celltarget) {
+		this.celltarget = celltarget;
+	}
+	public String getMysunk() {
+		return mysunk;
+	}
+	public void setMysunk(String mysunk) {
+		this.mysunk = mysunk;
 	}
 }
