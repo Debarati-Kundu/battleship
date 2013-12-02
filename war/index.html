@@ -31,12 +31,14 @@
       </div>
       
       <div id="board" class="hidden">
-      <div id="restartButton"><a href="#">Restart</a></div>
-      <div id="instructions">Please click on the grid below to reveal the computer's fleet arrangement. H means a hit,
-      M means miss, and S means sunk ship.</div>
+ <!--      <div id="restartButton"><a href="#">Restart</a></div> --> 
+      <div id="instructions">Please drag and drop your ships on the grid on the left, and click on the cells in the right grid to reveal the
+      server's fleet arrangement. Once you are done with arranging your ships, please click on the Placed button.
+      <br></br>
+      </div>
 
-       
-<table id="shiparrange">
+<div id="shiparrange">     
+<table>
 		<tr>
 		<td class="noTop noLeft noRight noBottom"><div><img src="/images/AC.gif"  id="Aircraft carrier" class="draggable"/></div> </td>
 		<td class="noTop noLeft noRight noBottom"><div><img src="/images/BS.gif"  id="Battleship" class="draggable1"/></div> </td>
@@ -44,7 +46,9 @@
 		<td class="noTop noLeft noRight noBottom"><div><img src="/images/Sub.gif"  id="Submarine" class="draggable3"/></div> </td>
 		<td class="noTop noLeft noRight noBottom"><div><img src="/images/Boat.gif"  id="Patrol Boat" class="draggable4"/></div> </td>
 		</tr>
-</table>    
+</table>  
+ </div>  
+ 
 <button type="button" id="placedShips">Placed!</button>           
     <table id="twoboards">
 	<tr>

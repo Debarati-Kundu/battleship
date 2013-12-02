@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/lMlbENk37z4x-7VymfwJVSTUwIQ\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/1IUdliZIquEBO517oG1zLJhHFMA\"",
  "discoveryVersion": "v1",
  "id": "tictactoe:v1",
  "name": "tictactoe",
@@ -78,6 +78,21 @@
     }
    }
   },
+  "ComputerBoard": {
+   "id": "ComputerBoard",
+   "type": "object",
+   "properties": {
+    "empty": {
+     "type": "boolean"
+    },
+    "gameID": {
+     "type": "string"
+    },
+    "state": {
+     "type": "string"
+    }
+   }
+  },
   "Score": {
    "id": "Score",
    "type": "object",
@@ -130,9 +145,87 @@
      "type": "string"
     }
    }
+  },
+  "myToken": {
+   "id": "myToken",
+   "type": "object",
+   "properties": {
+    "cellstate": {
+     "type": "string"
+    },
+    "celltarget": {
+     "type": "string"
+    },
+    "gameID": {
+     "type": "string"
+    },
+    "mysunk": {
+     "type": "string"
+    },
+    "state": {
+     "type": "string"
+    }
+   }
   }
  },
  "methods": {
+  "tictactoe.board.create": {
+   "id": "tictactoe.board.create",
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "tictactoe.board.gamecreate": {
+   "id": "tictactoe.board.gamecreate",
+   "returns": {
+    "$ref": "myToken"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "tictactoe.board.getUserShips": {
+   "id": "tictactoe.board.getUserShips",
+   "allowGet": true,
+   "parameters": {
+    "resource": {
+     "$ref": "ComputerBoard"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "tictactoe.board.getchannel": {
+   "id": "tictactoe.board.getchannel",
+   "allowGet": true,
+   "returns": {
+    "$ref": "myToken"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "tictactoe.board.gethit": {
+   "id": "tictactoe.board.gethit",
+   "parameters": {
+    "resource": {
+     "$ref": "ComputerBoard"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "ComputerBoard"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "tictactoe.board.getmove": {
    "id": "tictactoe.board.getmove",
    "parameters": {
@@ -145,6 +238,23 @@
    ],
    "returns": {
     "$ref": "Board"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "tictactoe.board.getusermove": {
+   "id": "tictactoe.board.getusermove",
+   "parameters": {
+    "resource": {
+     "$ref": "myToken"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "myToken"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

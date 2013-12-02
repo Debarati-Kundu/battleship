@@ -75,6 +75,7 @@ public void getUserShips(ComputerBoard inputuserboard) {
 		if (str.getKey().equals(presentGameid)) {
 			str.BoardUserA = inputuserboard;
 			str.BoardUserA.setBoardFromState();
+			System.out.println(str.BoardUserA.getState());
 			System.out.println(str.BoardUserB.getState());
 		}
 	}

@@ -60,6 +60,13 @@ body {
   font-weight: bold;
 }
 
+#lost {
+  height: 1em;
+  padding: 5pt;
+  color: red;
+  font-weight: bold;
+}
+
 #victory {
   height: 1em;
   padding: 5pt;

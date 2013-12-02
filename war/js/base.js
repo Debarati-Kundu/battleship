@@ -60,6 +60,7 @@ google.devrel.samples.ttt.STATUS_STRINGS = [
 
 // Variables pertaining to ship arrangement by the user
 var v0 = 0, v1 = 0, v2 = 0, v3 = 0, v4 = 0;
+var p0 = 0, p1 = 0, p2 = 0, p3 = 0, p4 = 0;
 var myboard1 = new Array();
 for (var i = 0; i < 100; i++)
 	myboard1[i] = '-';
@@ -126,10 +127,28 @@ google.devrel.samples.ttt.clickSquare = function(e) {
  * Resets the game board.
  */
 google.devrel.samples.ttt.resetGame = function() {
+	
 	google.devrel.samples.ttt.boardCreate();
 	document.getElementById('moves').innerHTML = '';
 	document.getElementById('sinking').innerHTML = '';
+	document.getElementById('lost').innerHTML = '';
 	
+	var shiporig = document.querySelector("#shiparrange");
+	var temp = shiporig.innerHTML;
+	shiporig.innerHTML = '';
+	shiporig.innerHTML = temp;
+	
+	shiporig.innerHTML = '';
+	shiporig.innerHTML += '<table><tr>';
+	shiporig.innerHTML += '<td class="noTop noLeft noRight noBottom"><div><img src="/images/AC.gif"  id="Aircraft carrier" class="draggable"/></div> </td>';
+	shiporig.innerHTML += '<td class="noTop noLeft noRight noBottom"><div><img src="/images/BS.gif"  id="Battleship" class="draggable1"/></div> </td>';
+	shiporig.innerHTML += '<td class="noTop noLeft noRight noBottom"><div><img src="/images/Dest.gif"  id="Destroyer" class="draggable2"/></div> </td>';
+	shiporig.innerHTML += '<td class="noTop noLeft noRight noBottom"><div><img src="/images/Sub.gif"  id="Submarine" class="draggable3"/></div> </td>';
+	shiporig.innerHTML += '<td class="noTop noLeft noRight noBottom"><div><img src="/images/Boat.gif"  id="Patrol Boat" class="draggable4"/></div> </td>';
+	shiporig.innerHTML += '</tr></table>'; 
+	
+	console.log(shiporig.innerHTML); 
+
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
     var button = buttons[i];
@@ -138,8 +157,9 @@ google.devrel.samples.ttt.resetGame = function() {
     button.innerHTML = '-';
     button.style.color = 'black';
   }
-  document.getElementById('victory').innerHTML = '';
+//  document.getElementById('victory').innerHTML = ''; 
   google.devrel.samples.ttt.waitingForMove = true;
+  
 };
 
 /**
@@ -418,9 +438,27 @@ google.devrel.samples.ttt.handleFinish = function(status) {
  */
 
 google.devrel.samples.ttt.getUserBoardString = function(e) {
+	if(!(p0 && p1 && p2 && p3 && p4)) {
+		alert("You haven't placed all your ships!");
+	} else {
+	
 	var button = e.target;
 	button.removeEventListener('click', google.devrel.samples.ttt.getUserBoardString);
+
 	var userBoardStrings = [];
+	for (var i = 0; i < 100; i++) myboard1[i] = '-';
+	for (var i = 0; i < 5; i++) {
+		var shipcar, shiplen;
+		if(i == 0) { shipcar = 'A'; shiplen = 5; }
+		if(i == 1) { shipcar = 'B'; shiplen = 4; }
+		if(i == 2) { shipcar = 'D'; shiplen = 3; }
+		if(i == 3) { shipcar = 'S'; shiplen = 3; }
+		if(i == 4) { shipcar = 'P'; shiplen = 2; }
+		for (var j = 0; j < shiplen; j++) {
+			myboard1[shiplocation[i][j]] = shipcar;
+		}
+	}
+	
 	for(var i = 0; i < 100; i++) {
 		userBoardStrings.push(myboard1[i]);
 	}
@@ -428,7 +466,14 @@ google.devrel.samples.ttt.getUserBoardString = function(e) {
 		, 'gameID' : gameID}).execute(function(resp) {
 //		console.log(userBoardStrings.join(''));
 	}); 
+	$('.draggable').draggable("disable");
+	$('.draggable1').draggable("disable");
+	$('.draggable2').draggable("disable");
+	$('.draggable2').draggable("disable");
+	$('.draggable4').draggable("disable");
 	
+	alert("Your ships have been successfully placed!"); 
+	}
 /*	  var boardStrings = [];
 	  var buttons = document.querySelectorAll('td');
 	  for (var i = 0; i < buttons.length; i++) {
@@ -530,7 +575,8 @@ google.devrel.samples.ttt.clickCell = function(e) {
 			if(numSunk == 5)
 				{
 					sinking.innerHTML += "You won!";
-					status1 = google.devrel.samples.ttt.WON;					
+					status1 = google.devrel.samples.ttt.WON;	
+					// TODO: To send the results to the server
 				}
 			if(status1 == google.devrel.samples.ttt.NOT_DONE)
 			{				
@@ -618,6 +664,7 @@ drag_rotate = function() {
  //       	$(this).attr("src",'/images/cross.gif');
     		var row, col;    		
         	if (shipname == "Aircraft carrier") {
+        		p0 = 1;
         		row = Math.floor(temp/12);
         		col = (temp%12) - 2;
         			for (var i = 0; i < 5; i++) {
@@ -627,6 +674,7 @@ drag_rotate = function() {
         			}   			       		
         	}
         	if (shipname == "Battleship") {
+        		p1 = 1;
         			row = Math.floor(temp/12);
         		if (v1 == 0)        		
         			col = (temp%12) - 1; 
@@ -638,6 +686,7 @@ drag_rotate = function() {
         		}
         	}
         	if (shipname == "Destroyer") {
+        		p2 = 1;
         			row = Math.floor(temp/12);
         			col = (temp%12) - 1; 
             			for (var i = 0; i < 3; i++) {
@@ -647,6 +696,7 @@ drag_rotate = function() {
             			}      			
         	}
         	if (shipname == "Submarine") {
+        		p3 = 1;
     			row = Math.floor(temp/12);
     			col = (temp%12) - 1; 
         			for (var i = 0; i < 3; i++) {
@@ -656,6 +706,7 @@ drag_rotate = function() {
         			}
         	}
         	if (shipname == "Patrol Boat") {
+        		p4 = 1;
         		row = Math.floor(temp/12);
         		col = (temp%12);  
         			for (var i = 0; i < 2; i++) {
@@ -665,7 +716,7 @@ drag_rotate = function() {
         			}
         	}
         	alert(ui.helper.attr('id') + " placed in " + row + " " + col);
-        	ui.draggable("disable");        	
+//        	ui.draggable("disable");        	
         }
     });
 }

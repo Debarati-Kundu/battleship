@@ -8,8 +8,8 @@
 
   <groupId>com.google.apis</groupId>
   <artifactId>google-api-services-tictactoe</artifactId>
-  <version>v1-rev20131028165758-1.16.0-rc</version>
-  <name>tictactoe v1 (revision 20131028165758)</name>
+  <version>v1-rev20131201023844-1.16.0-rc</version>
+  <name>tictactoe v1 (revision 20131201023844)</name>
   <packaging>jar</packaging>
 
   <inceptionYear>2011</inceptionYear>

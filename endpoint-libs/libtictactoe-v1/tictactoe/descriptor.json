@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/tictactoe/v1/20131028165758/java/1.16.0-rc/dktttweb_appspot_com-tictactoe-v1-20131028165758-java-1.16.0-rc-sources.jar", 
-      "path": "dktttweb_appspot_com-tictactoe-v1-20131028165758-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/tictactoe/v1/20131201023844/java/1.16.0-rc/dktttweb_appspot_com-tictactoe-v1-20131201023844-java-1.16.0-rc-sources.jar", 
+      "path": "dktttweb_appspot_com-tictactoe-v1-20131201023844-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2013-10-28 16:57"
+      "timestamp": "2013-12-01 02:38"
     }, 
     {
-      "path": "dktttweb_appspot_com-tictactoe-v1-20131028165758-java-1.16.0-rc.jar.properties", 
+      "path": "dktttweb_appspot_com-tictactoe-v1-20131201023844-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -701,5 +701,5 @@
   "version": "v1", 
   "language_version": "1.16.0-rc", 
   "id": "tictactoe:v1", 
-  "revision": 20131028165758
+  "revision": 20131201023844
 }

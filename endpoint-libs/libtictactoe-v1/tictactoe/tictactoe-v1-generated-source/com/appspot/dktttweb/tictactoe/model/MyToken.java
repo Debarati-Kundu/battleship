@@ -19,7 +19,7 @@
 package com.appspot.dktttweb.tictactoe.model;
 
 /**
- * Model definition for Score.
+ * Model definition for MyToken.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the tictactoe. For a detailed explanation see:
@@ -29,100 +29,121 @@ package com.appspot.dktttweb.tictactoe.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class Score extends com.google.api.client.json.GenericJson {
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
-  private java.lang.Long id;
+public final class MyToken extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.lang.String outcome;
+  private java.lang.String cellstate;
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private com.google.api.client.util.DateTime played;
+  private java.lang.String celltarget;
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private User player;
+  private java.lang.String gameID;
+
+  /**
+   * The value may be {@code null}.
+   */
+  @com.google.api.client.util.Key
+  private java.lang.String mysunk;
+
+  /**
+   * The value may be {@code null}.
+   */
+  @com.google.api.client.util.Key
+  private java.lang.String state;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.Long getId() {
-    return id;
+  public java.lang.String getCellstate() {
+    return cellstate;
   }
 
   /**
-   * @param id id or {@code null} for none
+   * @param cellstate cellstate or {@code null} for none
    */
-  public Score setId(java.lang.Long id) {
-    this.id = id;
+  public MyToken setCellstate(java.lang.String cellstate) {
+    this.cellstate = cellstate;
     return this;
   }
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getOutcome() {
-    return outcome;
+  public java.lang.String getCelltarget() {
+    return celltarget;
   }
 
   /**
-   * @param outcome outcome or {@code null} for none
+   * @param celltarget celltarget or {@code null} for none
    */
-  public Score setOutcome(java.lang.String outcome) {
-    this.outcome = outcome;
+  public MyToken setCelltarget(java.lang.String celltarget) {
+    this.celltarget = celltarget;
     return this;
   }
 
   /**
    * @return value or {@code null} for none
    */
-  public com.google.api.client.util.DateTime getPlayed() {
-    return played;
+  public java.lang.String getGameID() {
+    return gameID;
   }
 
   /**
-   * @param played played or {@code null} for none
+   * @param gameID gameID or {@code null} for none
    */
-  public Score setPlayed(com.google.api.client.util.DateTime played) {
-    this.played = played;
+  public MyToken setGameID(java.lang.String gameID) {
+    this.gameID = gameID;
     return this;
   }
 
   /**
    * @return value or {@code null} for none
    */
-  public User getPlayer() {
-    return player;
+  public java.lang.String getMysunk() {
+    return mysunk;
   }
 
   /**
-   * @param player player or {@code null} for none
+   * @param mysunk mysunk or {@code null} for none
    */
-  public Score setPlayer(User player) {
-    this.player = player;
+  public MyToken setMysunk(java.lang.String mysunk) {
+    this.mysunk = mysunk;
+    return this;
+  }
+
+  /**
+   * @return value or {@code null} for none
+   */
+  public java.lang.String getState() {
+    return state;
+  }
+
+  /**
+   * @param state state or {@code null} for none
+   */
+  public MyToken setState(java.lang.String state) {
+    this.state = state;
     return this;
   }
 
   @Override
-  public Score set(String fieldName, Object value) {
-    return (Score) super.set(fieldName, value);
+  public MyToken set(String fieldName, Object value) {
+    return (MyToken) super.set(fieldName, value);
   }
 
   @Override
-  public Score clone() {
-    return (Score) super.clone();
+  public MyToken clone() {
+    return (MyToken) super.clone();
   }
 
 }
