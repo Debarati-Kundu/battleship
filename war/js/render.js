@@ -25,8 +25,8 @@ google.devrel.samples.ttt = google.devrel.samples.ttt || {};
  * @type {string}
  */
 google.devrel.samples.ttt.CLIENT_ID =
-	"766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com"; // Client ID for localhost;
-//	"766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com"; // Client ID after deploying
+//	"766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com"; // Client ID for localhost;
+	"766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com"; // Client ID after deploying
   //  'YOUR-CLIENT-ID';
 
 /**

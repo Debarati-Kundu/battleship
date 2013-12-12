@@ -29,8 +29,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.ScoresV1.insert",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -45,8 +45,8 @@
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.ScoresV1.list",
       "request" : {
         "parameters" : {
@@ -70,8 +70,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.createBoard",
       "request" : {
         "body" : "empty"
@@ -85,8 +85,8 @@
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.getUserShips",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -101,8 +101,8 @@
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.getChannel",
       "request" : {
         "body" : "empty"
@@ -116,8 +116,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.getmove",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -132,8 +132,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.getHit",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -148,8 +148,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.getUserMove",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
@@ -164,8 +164,8 @@
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com" ],
-      "clientIds" : [ "766305347534-bpd0283444akest71skc9i16572jc9f4.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
+      "audiences" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com" ],
+      "clientIds" : [ "766305347534-fsl30sdlv6ujneanimd9f2k3gs7odto0.apps.googleusercontent.com", "766305347534-tfl9k9cuu7v87v6jqoii96h8u4jcn98i.apps.googleusercontent.com", "replace this with your iOS client ID" ],
       "rosyMethod" : "com.google.devrel.samples.ttt.spi.BoardV1.newGame",
       "request" : {
         "body" : "empty"
